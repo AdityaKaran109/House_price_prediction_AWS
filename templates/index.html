@@ -1,0 +1,201 @@
+
+<!-- Bangalore House Price Predictor -->
+
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Bangalore House Price Predictor ML App</title>
+
+  <style>
+  
+      body {
+     
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      background-color: #ADD8E6;
+    }
+
+      table, th, td {
+  border: 1px solid black;
+}
+
+    h1   {color: red;}  /* CSS code for heading h1 */
+    p   {color: black;}  /* CSS code for heading h1 */
+
+    /* CSS code for button */
+    .button_css {
+    color: #494949 !important;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: #ffffff;
+    padding: 20px;
+    border: 4px solid #494949 !important;
+    display: inline-block;
+    transition: all 0.4s ease 0s;
+    }
+    
+    .button_css:hover {
+    color: #ffffff !important;
+    background: #f6b93b;
+    border-color: #f6b93b !important;
+    transition: all 0.4s ease 0s;
+    }
+    
+    .footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #203864;
+  color: white;
+  text-align: center;
+  
+  /* unvisited link */ 
+  a:link { color: White; } 
+  /* visited link */ 
+  a:visited { color: green; }
+}   
+  </style>
+
+</head>
+
+<body>
+
+  <!-- Show Oxstandhard Univercity Banner
+  <div>
+    <img src="static/images/Logo.png" class="w3-border w3-padding" alt="Indian AI Production" style="width:25%" align="center">
+  </div>-->
+
+ 
+ 
+ <div class="login">
+  
+    <!-- Form Get input to predict Marks-->
+    <center>
+    <form action="{{ url_for('predict')}}"method="post" align="center">
+        <div>
+             <img src="static/images/Logo.png" class="w3-border w3-padding" alt="BrainGears" style="width:25%" align="center">
+          </div>
+        <h1>*Enter the Information of House to Predict the Price*</h1>
+        
+      <input align="center" type="number" name="bathrooms" placeholder="Bathrooms" required="required" width="48" height="10" step=".01"/><br>
+      <input align="center" type="number" name="balcony" placeholder="Balcony" required="required" width="48" height="10" step=".01"/><br>
+      <input align="center" type="number" name="total_sqft_int" placeholder="Total Squre Foot" required="required" width="48" height="10" step=".01"/><br>
+      <input align="center" type="number" name="bhk" placeholder="BHK" required="required" width="48" height="10" step=".01"/><br>
+      <input align="center" type="number" name="price_per_sqft" placeholder="Price Per Squre Foot" required="required" width="48" height="10" step=".01"/><br>
+      <input type="text" name="area_type" placeholder="Area Type" required="required" /><br>
+      <input type="text" name="availability" placeholder="House Availability" required="required" /><br>
+      <input type="text" name="location" placeholder="House Location" required="required" />      
+
+      <br>
+        
+        <br>
+        
+        <!-- Show button -->
+        <div class="button_cont" align="center"><a class="button_css" href="https://indianaiproduction.com/" target="_blank" rel="nofollow noopener">
+            <button type="submit" class="btn btn-primary btn-block btn-large"><strong>Predict House Price</strong></button></a>
+        </div>
+        
+    </form>
+    </center>
+   
+   <!-- Show predicted output using ML model --> 
+   <div>
+       <center>
+   <h2>{{ prediction_text }}</h2>
+       </center>
+   </div>
+    <table style="width:100%">
+  <tr>
+    <th>Model Name</th>
+    <th>Score</th> 
+    <th>RMSE</th>
+  </tr>
+  <tr>
+    <td>Linear Regression</td>
+    <td>0.974938</td>
+    <td>5.179092</td>
+  </tr>
+  <tr>
+    <td>Lasso</td>
+    <td>0.971788</td>
+    <td>5.495004</td>
+  </tr>
+  <tr>
+    <td>Ridge</td>
+    <td>0.974956</td>
+    <td>5.177265</td>
+  </tr>
+  <tr>
+    <td>Support Vector Machine</td>
+    <td>0.979571</td>
+    <td>4.676017</td>
+  </tr>
+    <tr>
+    <td>Random Forest</td>
+    <td>0.999459</td>
+    <td>0.761071</td>
+  </tr>
+    <tr>
+    <td> XGBoost</td>
+    <td>0.999015</td>
+    <td>1.026602</td>
+  </tr>
+</table>
+
+<p><b>The Cross Validation for XGboost and Random Forest are: 0.998805021560916 and  0.999307704618541 therfor there is no overfitting or underfitting</b></p>
+<h2 align="center" color="red ">Values to be used</h2>
+
+
+<p>Bathroom should be between<b> 1-5</b><br></p>
+<p>Balcony should be between <b>1-4</b><br></p>
+<p>Totol sqft minimum value is <b>350.0</b>  and maximun value is <b>2388.0</b> <br><br>Bhk should be between <b>1-4</b><br></p>
+<p>price_per_sqft minimum value is 1166 and maximun value is <b>9733</b><br><br></p>
+<p>Aera type has four values<b> area_typeSuper built-up Area, area_typeBuilt-up Area, area_typePlot Area, area_typeCarpet Area</b><br><br></p>
+<p>House Availability is either <b>Ready To Move or Not ready to move</b><br><br></p>
+<p>House Location are: <b>['Whitefield', 'Sarjapur  Road', 'Electronic City', 'Kanakpura Road',
+       'Thanisandra', 'Yelahanka', 'Uttarahalli', 'Raja Rajeshwari Nagar',
+       'Marathahalli', 'Hennur Road', 'Bannerghatta Road',
+       '7th Phase JP Nagar', 'Haralur Road', 'Electronic City Phase II',
+       'Hebbal', 'Chandapura', 'Electronics City Phase 1', 'Bellandur',
+       'Hoodi', 'Begur Road', 'Kasavanhalli', 'Harlur', 'Hormavu',
+       'Yeshwanthpur', 'KR Puram', 'Hosa Road', 'Varthur', 'Kaggadasapura',
+       'Kengeri', 'Sarjapur', 'Jakkur', 'Banashankari', 'Akshaya Nagar',
+       'Kothanur', 'Budigere', 'Panathur', 'TC Palaya', 'Rachenahalli',
+       'Bisuvanahalli', 'Thigalarapalya', 'Old Madras Road', 'JP Nagar',
+       'Hennur', 'Ramamurthy Nagar', 'Balagere', 'Ramagondanahalli',
+       'Mysore Road', 'Gottigere', 'Jalahalli', 'Bhoganhalli', 'HSR Layout',
+       '8th Phase JP Nagar', 'Jigani', 'Hosur Road', 'Kanakapura',
+       'Vittasandra', 'Hulimavu', 'CV Raman Nagar', 'Subramanyapura',
+       'Kundalahalli', 'Talaghattapura', 'Hegde Nagar', 'Horamavu Agara',
+       'Koramangala', 'Bommasandra', 'Green Glen Layout', 'Brookefield',
+       'Kudlu Gate', 'Lakshminarayana Pura', 'Kadugodi', 'Attibele',
+       'Channasandra', 'Kalena Agrahara', 'Devanahalli', 'Vijayanagar',
+       '5th Phase JP Nagar', 'Yelahanka New Town', 'Tumkur Road',
+       'Kengeri Satellite Town', 'Doddathoguru', '9th Phase JP Nagar',
+       'Bommanahalli', 'Nagarbhavi', 'Sahakara Nagar', 'Kudlu', 'Mahadevpura',
+       'Ananth Nagar', 'Chikkalasandra', 'Somasundara Palya', 'Dodda Nekkundi',
+       'Kammasandra', 'Anekal', 'Bommasandra Industrial Area']</b><br>
+</p>
+
+ </div>
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
